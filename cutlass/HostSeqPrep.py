@@ -1104,9 +1104,12 @@ class HostSeqPrep(Base):
 
         from cutlass.HostWgsRawSeqSet import HostWgsRawSeqSet
         from cutlass.HostTranscriptomicsRawSeqSet import HostTranscriptomicsRawSeqSet
+        from cutlass.HostEpigeneticsRawSeqSet import HostEpigeneticsRawSeqSet
 
         for doc in self._derived_docs():
             if doc['node_type'] == "host_transcriptomics_raw_seq_set":
                 yield HostTranscriptomicsRawSeqSet.load_host_transcriptomics_raw_seq_set(doc)
             elif doc['node_type'] == "host_wgs_raw_seq_set":
                 yield HostWgsRawSeqSet.load_hostWgsRawSeqSet(doc)
+            elif doc['node_type'] == "host_epigenetics_raw_seq_set":
+                yield HostEpigeneticsRawSeqSet.load_host_epigenetics_raw_seq_set(doc)

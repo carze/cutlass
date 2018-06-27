@@ -1138,6 +1138,7 @@ class HostAssayPrep(Base):
         from cutlass.Lipidome import Lipidome
         from cutlass.Metabolome import Metabolome
         from cutlass.Proteome import Proteome
+        from cutlass.Serology import Serology
 
         for doc in self._derived_docs():
             if doc['node_type'] == "lipidome":
@@ -1148,3 +1149,5 @@ class HostAssayPrep(Base):
                 yield Cytokine.load_cytokine(doc)
             elif doc['node_type'] == "proteome":
                 yield Proteome.load_proteome(doc)
+            elif doc['node_type'] == "serology":
+                yield Serology.load_serology(doc)

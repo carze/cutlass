@@ -30,7 +30,7 @@ class SixteenSRawSeqSet(Base):
     """
     namespace = "ihmp"
 
-    aspera_server = "aspera.ihmpdcc.org"
+    aspera_server = "aspera2.ihmpdcc.org"
 
     def __init__(self, *args, **kwargs):
         """

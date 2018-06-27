@@ -31,7 +31,7 @@ class Annotation(Base):
     """
     namespace = "ihmp"
 
-    aspera_server = "aspera.ihmpdcc.org"
+    aspera_server = "aspera2.ihmpdcc.org"
 
     date_format = '%Y-%m-%d'
 

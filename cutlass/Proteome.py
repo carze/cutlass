@@ -35,7 +35,7 @@ class Proteome(Base):
 
     date_format = '%Y-%m-%d'
 
-    aspera_server = "aspera.ihmpdcc.org"
+    aspera_server = "aspera2.ihmpdcc.org"
 
     def __init__(self, *args, **kwargs):
         """

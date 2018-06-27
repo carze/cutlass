@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import string
+from itertools import count
 from cutlass.iHMPSession import iHMPSession
 from cutlass.Base import Base
 from cutlass.aspera import aspera
@@ -29,7 +30,7 @@ class MicrobTranscriptomicsRawSeqSet(Base):
     """
     namespace = "ihmp"
 
-    aspera_server = "aspera.ihmpdcc.org"
+    aspera_server = "aspera2.ihmpdcc.org"
 
     def __init__(self, *args, **kwargs):
         """
@@ -766,3 +767,34 @@ class MicrobTranscriptomicsRawSeqSet(Base):
 
         self.logger.debug("Returning " + str(success))
         return success
+
+
+    def _derived_docs(self):
+        self.logger.debug("In _derived_docs().")
+
+        linkage_query = '"{}"[linkage.computed_from]'.format(self.id)
+        query = iHMPSession.get_session().get_osdf().oql_query
+
+        for page_no in count(1):
+            res = query(MicrobTranscriptomicsRawSeqSet.namespace, linkage_query, page=page_no)
+            res_count = res['result_count']
+
+            for doc in res['results']:
+                yield doc
+            res_count -= len(res['results'])
+
+            if res_count < 1:
+                break
+
+    def derivations(self):
+        """
+        Return an iterator of all the derived nodes from this SeqSet, including 
+        abundance matrices, ... etc.
+        """
+        self.logger.debug("In derivations().")
+
+        from cutlass.AbundanceMatrix import AbundanceMatrix
+
+        for doc in self._derived_docs():
+            if doc['node_type'] == "abundance_matrix":
+                yield AbundanceMatrix.load_abundance_matrix(doc)

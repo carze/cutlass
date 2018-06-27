@@ -50,6 +50,7 @@ class Study(Base):
         self._contact = None
         self._subtype = None
         self._srp_id = None
+        self._bp_id = None
 
         super(Study, self).__init__(*args, **kwargs)
 
@@ -176,6 +177,30 @@ class Study(Base):
         self._contact = contact
 
     @property
+    def bp_id(self):
+        """
+        str: NCBI BioProject ID
+        """
+        self.logger.debug("In 'bp_id' getter.")
+        return self._bp_id
+
+    @bp_id.setter
+    @enforce_string
+    def bp_id(self, bp_id):
+        """
+        The setter for the Study bp_id.
+
+        Args:
+            bp_id (str): The new bioproject ID for the study.
+
+        Returns:
+            None
+        """
+        self.logger.debug("In 'bp_id' setter.")
+
+        self._bp_id = bp_id
+
+    @property
     def srp_id(self):
         """
         str: NCBI Sequence Read Archive (SRA) project ID
@@ -286,7 +311,11 @@ class Study(Base):
 
         if self._srp_id is not None:
             self.logger.debug("Study object has the OSDF srp id set.")
-            study_doc['srp_id'] = self._srp_id
+            study_doc['meta']['srp_id'] = self._srp_id
+
+        if self._bp_id is not None:
+            self.logger.debug("Study object has the OSDF bp id set.")
+            study_doc['meta']['bp_id'] = self._bp_id
 
         return study_doc
 
@@ -366,7 +395,9 @@ class Study(Base):
 
         if 'srp_id' in study_data['meta']:
             study.srp_id = study_data['meta']['srp_id']
-
+        if 'bp_id' in study_data['meta']:
+            study.bp_id = study_data['metadata']['bp_id']
+          
         module_logger.debug("Returning loaded Study.")
         return study
 
